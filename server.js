@@ -52,7 +52,7 @@ app.use(bodyParse.json());
 
 app.options("*", cors());
 app.get("/", cors(), (req, res) => {
-	res.json("We are workings");
+	res.json(db.select("*").from("userdata"));
 });
 
 app.post("/signin", cors(), (req, res) => {
