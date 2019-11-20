@@ -69,11 +69,13 @@ app.post("/signin", (req, res) => {
 		.from("userdata")
 		.where("email", "=", req.body.email)
 		.then(data => {
-			if (data[0].pass === req.body.pass) {
-				res.json(data[0]);
-			} else res.json("fail");
+			if (data != [])
+				if (data[0].pass === req.body.pass) {
+					res.json(data[0]);
+				} else res.json("fail");
 			console.log(data);
-		});
+		})
+		.catch(err => res.json("Wrong Id Password"));
 });
 
 app.post("/register", (req, res) => {
@@ -102,10 +104,9 @@ app.post("/register", (req, res) => {
 // 	});
 // });
 
-app.listen(5000),
-	() => {
-		console.log("Server Running");
-	};
+app.listen(process.env.PORT || 5000, () => {
+	console.log(`Server Running on ${process.env.PORT}`);
+});
 
 /*
 	/  --> root says hello
