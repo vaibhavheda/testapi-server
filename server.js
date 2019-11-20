@@ -65,17 +65,22 @@ app.post("/signin", cors(), (req, res) => {
 	// 	} else res.json("fail");
 	// 	console.log(req.body);
 	// }
-	db.select("email", "pass", "id")
+	// db.select("email", "pass", "id")
+	// 	.from("userdata")
+	// 	.where("email", "=", req.body.email)
+	// 	.then(data => {
+	// 		if (data != [])
+	// 			if (data[0].pass === req.body.pass) {
+	// 				res.json(data[0]);
+	// 			} else res.json("fail");
+	// 		console.log(data);
+	// 	})
+	// 	.catch(err => res.json("Wrong Id Password"));
+	db.select("*")
 		.from("userdata")
-		.where("email", "=", req.body.email)
-		.then(data => {
-			if (data != [])
-				if (data[0].pass === req.body.pass) {
-					res.json(data[0]);
-				} else res.json("fail");
-			console.log(data);
-		})
-		.catch(err => res.json("Wrong Id Password"));
+		.then(member => {
+			console.log(member);
+		});
 });
 
 app.post("/register", cors(), (req, res) => {
