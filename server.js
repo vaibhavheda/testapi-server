@@ -2,14 +2,13 @@ const express = require("express");
 const bodyParse = require("body-parser");
 const cors = require("cors");
 const knex = require("knex");
+const pg = require("pg");
 
 const db = knex({
 	client: "pg",
 	connection: {
-		host: "127.0.0.1",
-		user: "Vaibhav",
-		password: "root",
-		database: "test-database"
+		connectionString: process.env.DATABASE_URL,
+		ssl: true
 	}
 });
 
