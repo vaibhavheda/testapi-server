@@ -89,7 +89,10 @@ app.post("/register", (req, res) => {
 		.then(user => {
 			res.json("success");
 		})
-		.catch(err => res.json("error"));
+		.catch(err => {
+			res.json("error");
+			console.log(err);
+		});
 });
 
 // app.get("/card/:id", (req, res) => {
