@@ -1,78 +1,106 @@
 const express = require("express");
 const bodyParse = require("body-parser");
 const cors = require("cors");
+const knex = require("knex");
+
+const db = knex({
+	client: "pg",
+	connection: {
+		host: "127.0.0.1",
+		user: "Vaibhav",
+		password: "root",
+		database: "test-database"
+	}
+});
+
+console.log(
+	db
+		.select("*")
+		.from("userdata")
+		.then(data => {
+			console.log(data);
+		})
+);
 
 const app = express();
 
-const db = {
-	users: [
-		{
-			id: "1",
-			name: "vai",
-			email: "vai@gmail.com",
-			pass: "cookies"
-		},
-		{
-			id: "2",
-			name: "Sri",
-			email: "sri@gmail.com",
-			pass: "hello"
-		},
-		{
-			id: "3",
-			name: "Aish",
-			email: "Aish@gmail.com",
-			pass: "hello"
-		}
-	]
-};
+// const db = {
+// 	users: [
+// 		{
+// 			id: "1",
+// 			name: "vai",
+// 			email: "vai@gmail.com",
+// 			pass: "cookies"
+// 		},
+// 		{
+// 			id: "2",
+// 			name: "Sri",
+// 			email: "sri@gmail.com",
+// 			pass: "hello"
+// 		},
+// 		{
+// 			id: "3",
+// 			name: "Aish",
+// 			email: "Aish@gmail.com",
+// 			pass: "hello"
+// 		}
+// 	]
+// };
 
 app.use(cors());
 app.use(bodyParse.urlencoded({ extended: false }));
 app.use(bodyParse.json());
-// app.use((req, res, next) => {
-// 	console.log("hello");
-// 	next();
-// });
-//root
+
 app.get("/", (req, res) => {
-	res.json(db.users);
+	//res.json(db.userdata);
 });
 
 app.post("/signin", (req, res) => {
-	for (var i = 0; i < db.users.length; i++) {
-		if (
-			req.body.email === db.users[i].email &&
-			req.body.pass === db.users[i].pass
-		) {
-			res.json(db.users[i]);
-		} else res.json("fail");
-		console.log(req.body);
-	}
+	// for (var i = 0; i < db.users.length; i++) {
+	// 	if (
+	// 		req.body.email === db.users[i].email &&
+	// 		req.body.pass === db.users[i].pass
+	// 	) {
+	// 		res.json(db.users[i]);
+	// 	} else res.json("fail");
+	// 	console.log(req.body);
+	// }
+	db.select("email", "pass", "id")
+		.from("userdata")
+		.where("email", "=", req.body.email)
+		.then(data => {
+			if (data[0].pass === req.body.pass) {
+				res.json(data[0]);
+			} else res.json("fail");
+			console.log(data);
+		});
 });
 
 app.post("/register", (req, res) => {
 	const { email, name, pass } = req.body;
-	db.users.push({
-		id: "5",
-		name: name,
-		email: email,
-		pass: pass
-	});
-	res.json(db.users[db.users.length - 1]);
-	console.log(req.body);
+	db("userdata")
+		.insert({
+			email: email,
+			name: name,
+			pass: pass,
+			joined: new Date()
+		})
+		.then(user => {
+			res.json("success");
+		})
+		.catch(err => res.json("error"));
 });
 
-app.get("/card/:id", (req, res) => {
-	var { id } = req.params;
-	var found = false;
-	db.users.forEach(user => {
-		if (user.id === id) {
-			found = true;
-			return res.json(user);
-		}
-	});
-});
+// app.get("/card/:id", (req, res) => {
+// 	var { id } = req.params;
+// 	var found = false;
+// 	db.users.forEach(user => {
+// 		if (user.id === id) {
+// 			found = true;
+// 			return res.json(user);
+// 		}
+// 	});
+// });
 
 app.listen(5000),
 	() => {
