@@ -52,7 +52,7 @@ app.use(bodyParse.json());
 
 app.options("*", cors());
 app.get("/", cors(), (req, res) => {
-	res.json(db.select("*").from("userdata"));
+	res.json("working");
 });
 
 app.post("/signin", cors(), (req, res) => {
@@ -81,15 +81,14 @@ app.post("/signin", cors(), (req, res) => {
 app.post("/register", cors(), (req, res) => {
 	const { email, name, pass } = req.body;
 	db("userdata")
+		.returning("*")
 		.insert({
 			email: email,
 			name: name,
 			pass: pass,
 			joined: new Date()
 		})
-		.then(user => {
-			res.json("success");
-		})
+		.then(res.json("success"))
 		.catch(err => {
 			res.json("error");
 			console.log(err);
