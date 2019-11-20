@@ -51,7 +51,7 @@ app.use(bodyParse.urlencoded({ extended: false }));
 app.use(bodyParse.json());
 
 app.get("/", (req, res) => {
-	console.log(db.select("*").from("userdata"));
+	res.json("We are workings");
 });
 
 app.post("/signin", (req, res) => {
