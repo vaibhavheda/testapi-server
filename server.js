@@ -52,7 +52,7 @@ app.use(bodyParse.urlencoded({ extended: false }));
 app.use(bodyParse.json());
 
 app.get("/", (req, res) => {
-	//res.json(db.userdata);
+	res.json("We are workings");
 });
 
 app.post("/signin", (req, res) => {
