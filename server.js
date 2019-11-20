@@ -50,11 +50,12 @@ app.use(cors());
 app.use(bodyParse.urlencoded({ extended: false }));
 app.use(bodyParse.json());
 
-app.get("/", (req, res) => {
+app.options("*", cors());
+app.get("/", cors(), (req, res) => {
 	res.json("We are workings");
 });
 
-app.post("/signin", (req, res) => {
+app.post("/signin", cors(), (req, res) => {
 	// for (var i = 0; i < db.users.length; i++) {
 	// 	if (
 	// 		req.body.email === db.users[i].email &&
@@ -77,7 +78,7 @@ app.post("/signin", (req, res) => {
 		.catch(err => res.json("Wrong Id Password"));
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", cors(), (req, res) => {
 	const { email, name, pass } = req.body;
 	db("userdata")
 		.insert({
@@ -106,8 +107,9 @@ app.post("/register", (req, res) => {
 // 	});
 // });
 
-app.listen(process.env.PORT || 5000, () => {
-	console.log(`Server Running on ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+	console.log(`app is running on ${PORT}`);
 });
 
 /*
